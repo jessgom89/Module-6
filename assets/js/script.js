@@ -11,14 +11,18 @@ if(localStorage.getItem("cityarray")){
     cityarray=JSON.parse(localStorage.getItem("cityarray"))
     citylist.innerHTML=""
     for (let i = 0; i < cityarray.length; i++) {
-      citylist.innerHTML+=cityarray[i]  
+      citylist.innerHTML+=`<li class="list-group-item"><button type="button" class="w-100 btn btn-secondary">${cityarray[i]}</button></li>`  
         
     }
+    citylist.addEventListener("click",function(event){
+        displayweather(event.target.textContent)
+    })
 }
 }
 displaycity()
 function search(){
-displayweather(cityinput.value)    
+displayweather(cityinput.value) 
+cityinput.value=""   
 }
 function displayweather(cityname)
 {
@@ -29,9 +33,11 @@ function displayweather(cityname)
     })
     .then(function(currentdata){
         console.log(currentdata)
-        if(cityarray.includes(currentdata.name)===false){
+        if(cityarray.includes(currentdata.name)===false&& currentdata.name ){
             cityarray.push(currentdata.name)
-            localStorage.setItem("cityarray",JSON.stringify(cityarray))
+            localStorage.setItem("cityarray",JSON.stringify
+            (cityarray))
+            displaycity()
         }
         dashboard.innerHTML=`
         <h4  class=" fw-bold">${currentdata.name} (${dayjs.unix(currentdata.dt).format("MM/DD/YYYY")})
